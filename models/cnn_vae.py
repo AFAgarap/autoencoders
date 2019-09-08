@@ -19,6 +19,7 @@ class CVAE(tf.keras.Model):
 
 class Encoder(tf.keras.layers.Layer):
     def __init__(self, **kwargs):
+        super(Encoder, self).__init__()
         self.input_layer = tf.keras.layers.InputLayer(input_shape=kwargs['input_shape'])
         self.conv_layer_1 = tf.keras.layers.Conv2D(filters=6, kernel_size=5, activation=tf.nn.relu)
         self.pool_layer_1 = tf.keras.layers.MaxPooling2D(padding='same')
