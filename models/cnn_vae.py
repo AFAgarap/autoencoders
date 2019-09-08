@@ -10,11 +10,21 @@ import tensorflow as tf
 
 class CVAE(tf.keras.Model):
     def __init__(self, **kwargs):
-        pass
+        super(CVAE, self).__init__()
+        self.encoder = Encoder(
+                input_shape=kwargs['input_shape'],
+                latent_dim=kwargs['latent_dim']
+                )
+        self.decoder = Decoder(latent_dim=kwargs['latent_dim'])
 
     @tf.function
     def call(self, features):
-        pass
+        z_mean, z_log_var, z = self.encoder(features)
+        reconstructed = self.decoder(z)
+        kl_divergence = -5e-2 * tf.reduce_sum(tf.exp(z_log_var) + tf.square(z_mean) - 1 - z_log_var)
+        self.add_loss(kl_divergence)
+        return reconstructed
+
 
 class Encoder(tf.keras.layers.Layer):
     def __init__(self, **kwargs):
@@ -97,4 +107,10 @@ class Decoder(tf.keras.layers.Layer):
         return output
 
 
-
+class Sampling(tf.keras.layers.Layer):
+    def call(self, args):
+        z_mean, z_log_var = args
+        batch = tf.shape(z_mean)[0]
+        dimension = tf.shape(z_mean)[1]
+        epsilon = tf.random.normal(shape=(batch, dimension), mean=0., stddev=1.)
+        return z_mean + epsilon + tf.exp(5e-1 * z_log_var)
