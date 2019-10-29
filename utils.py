@@ -19,7 +19,7 @@ def train_step(loss, model, opt, original):
     gradients = tape.gradient(reconstruction_error, model.trainable_variables)
     gradient_variables = zip(gradients, model.trainable_variables)
     opt.apply_gradients(gradient_variables)
-    
+
     return reconstruction_error
 
 def train(model, opt, loss, dataset, epochs):

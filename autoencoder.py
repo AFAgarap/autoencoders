@@ -18,7 +18,7 @@ class Autoencoder(tf.keras.Model):
         self.encoder_hidden_layers = []
         self.decoder_hidden_layers = []
         self.original_dim = original_dim
-        
+
         """Encoder"""
         for neuron in self.neurons:
           self.encoder_hidden_layers.append(Dense(units=neuron, activation=tf.nn.relu))
@@ -26,14 +26,14 @@ class Autoencoder(tf.keras.Model):
         for neuron in self.neurons[::-1]:
           self.decoder_hidden_layers.append(Dense(units=neuron, activation=tf.nn.relu))
         self.decoder_output_layer = Dense(units=original_dim, activation=tf.nn.relu)
-        
+
     def call(self, input_features):
       """Encoder"""
       activation = self.encoder_hidden_layers[0](input_features)
       if len(self.neurons) > 1:
         for layer in range(len(self.neurons) - 1):
           layer = layer + 1
-          activation = self.encoder_hidden_layers[layer](activation)         
+          activation = self.encoder_hidden_layers[layer](activation)
       """Decoder"""
       activation = self.decoder_hidden_layers[0](activation)
       if len(self.neurons) > 1:

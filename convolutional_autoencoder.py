@@ -13,7 +13,7 @@ class LeNet(tf.keras.Model):
     def __init__(self):
         super(LeNet, self).__init__()
         self.loss = []
-		
+
         """Encoder"""
         self.conv_layer_1 = tf.keras.layers.Conv2D(
             filters=6,
