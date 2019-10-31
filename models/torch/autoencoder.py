@@ -29,10 +29,7 @@ class AE(nn.Module):
         reconstructed = F.relu(reconstructed)
         return reconstructed
 
-
-transform = torchvision.transforms.Compose(
-        [torchvision.transforms.ToTensor(),]
-        )
+transform = torchvision.transforms.Compose([torchvision.transforms.ToTensor()])
 
 train_dataset = torchvision.datasets.MNIST(
         root='~/torch_datasets',
@@ -96,7 +93,11 @@ with torch.no_grad():
 
         # display reconstruction
         ax = plt.subplot(2, number, index + 1 + number)
-        output = model(test_dataset.data[index].to(device).float().view(-1, 784))
+        test_data = test_dataset.data[index]
+        test_data = test_data.to(device)
+        test_data = test_data.float()
+        test_data = test_data.view(-1, 784)
+        output = model(test_data)
         plt.imshow(output.cpu().reshape(28, 28))
         plt.gray()
         ax.get_xaxis().set_visible(False)
