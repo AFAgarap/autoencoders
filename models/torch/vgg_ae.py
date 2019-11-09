@@ -101,9 +101,6 @@ class Decoder(nn.Module):
         activation = F.relu(activation)
         activation = self.convt2_layer_2(activation)
         reconstructed = F.relu(activation)
-#        print(activation.size())
-#        activation = self.convt2_layer_3(activation)
-#        reconstructed = F.relu(activation)
         return reconstructed
 
 
