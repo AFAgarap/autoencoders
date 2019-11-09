@@ -85,12 +85,6 @@ class Decoder(nn.Module):
                 kernel_size=3,
                 stride=(1, 1)
                 )
-        self.convt2_layer_3 = nn.ConvTranspose2d(
-                in_channels=32,
-                out_channels=1,
-                kernel_size=4,
-                stride=(1, 1)
-                )
 
     def forward(self, features):
         activation = self.convt1_layer_1(features)
