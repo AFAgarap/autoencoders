@@ -37,10 +37,8 @@ class Encoder(nn.Module):
     def forward(self, features):
         activation = self.conv_layer_1(features)
         activation = F.relu(activation)
-#        print(activation.size())
         activation = self.conv_layer_2(activation)
         code = F.relu(activation)
-#        print(code.size())
         return code
 
 
@@ -69,13 +67,10 @@ class Decoder(nn.Module):
     def forward(self, features):
         activation = self.convt_layer_1(features)
         activation = F.relu(activation)
-#        print(activation.size())
         activation = self.convt_layer_2(activation)
         activation = F.relu(activation)
-#        print(activation.size())
         activation = self.convt_layer_3(activation)
         reconstructed = F.relu(activation)
-#        print(reconstructed.size())
         return reconstructed
 
 
@@ -87,9 +82,7 @@ class AE(nn.Module):
 
     def forward(self, features):
         code = self.encoder(features)
-#        print(code.size())
         reconstructed = self.decoder(code)
-#        print(reconstructed.size())
         return reconstructed
 
 
