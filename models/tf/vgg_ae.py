@@ -47,7 +47,7 @@ class Encoder(tf.keras.layers.Layer):
         self.conv_2_layer_2 = tf.keras.layers.Conv2D(
                 filters=64,
                 kernel_size=(3, 3),
-                activation=tf.nn.relu
+                activation=tf.nn.sigmoid
                 )
 
     def call(self, features):
