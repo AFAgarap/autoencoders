@@ -15,7 +15,7 @@ class CVAE(tf.keras.Model):
                 input_shape=kwargs['input_shape'],
                 latent_dim=kwargs['latent_dim']
                 )
-        self.decoder = Decoder(latent_dim=kwargs['latent_dim'])
+        self.decoder = Decoder(channels=kwargs['input_shape'][-1])
 
     def call(self, features):
         code = self.encoder(features)
@@ -78,7 +78,7 @@ class Decoder(tf.keras.layers.Layer):
                 activation=tf.nn.relu
                 )
         self.convt_2_layer_2 = tf.keras.layers.Conv2DTranspose(
-                filters=1,
+                filters=kwargs['channels'],
                 kernel_size=(3, 3),
                 strides=(1, 1),
                 activation=tf.nn.sigmoid
