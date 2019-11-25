@@ -11,10 +11,7 @@ import tensorflow as tf
 class CVAE(tf.keras.Model):
     def __init__(self, **kwargs):
         super(CVAE, self).__init__()
-        self.encoder = Encoder(
-                input_shape=kwargs['input_shape'],
-                latent_dim=kwargs['latent_dim']
-                )
+        self.encoder = Encoder(input_shape=kwargs['input_shape'])
         self.decoder = Decoder(channels=kwargs['input_shape'][-1])
 
     def call(self, features):
