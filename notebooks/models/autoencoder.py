@@ -1,43 +1,42 @@
-"""Implementation of feed forward autoencoder in TensorFlow 2.0"""
+"""Implementation of vanila autoencoder in TensorFlow 2.0 Subclassing API"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
 __version__ = '1.0.0'
-__author__ = 'Richard Ricardo'
+__author__ = 'Abien Fred Agarap'
 
 import tensorflow as tf
-from tensorflow.keras.layers import Dense
 
 
-class Autoencoder(tf.keras.Model):
-    def __init__(self, neurons, original_dim):
-        super(Autoencoder, self).__init__()
-        self.loss = []
-        self.neurons = neurons
-        self.encoder_hidden_layers = []
-        self.decoder_hidden_layers = []
-        self.original_dim = original_dim
-
-        """Encoder"""
-        for neuron in self.neurons:
-          self.encoder_hidden_layers.append(Dense(units=neuron, activation=tf.nn.relu))
-        """Decoder"""
-        for neuron in self.neurons[::-1]:
-          self.decoder_hidden_layers.append(Dense(units=neuron, activation=tf.nn.relu))
-        self.decoder_output_layer = Dense(units=original_dim, activation=tf.nn.relu)
+class Encoder(tf.keras.layers.Layer):
+    def __init__(self, intermediate_dim=128, code_dim=64):
+        super(Encoder, self).__init__()
+        self.hidden_layer = tf.keras.layers.Dense(units=intermediate_dim, activation=tf.nn.relu)
+        self.output_layer = tf.keras.layers.Dense(units=code_dim, activation=tf.nn.relu)
 
     def call(self, input_features):
-      """Encoder"""
-      activation = self.encoder_hidden_layers[0](input_features)
-      if len(self.neurons) > 1:
-        for layer in range(len(self.neurons) - 1):
-          layer = layer + 1
-          activation = self.encoder_hidden_layers[layer](activation)
-      """Decoder"""
-      activation = self.decoder_hidden_layers[0](activation)
-      if len(self.neurons) > 1:
-        for layer in range(len(self.neurons) - 1):
-          layer = layer + 1
-          activation = self.decoder_hidden_layers[layer](activation)
-      return self.decoder_output_layer(activation)
+        activation = self.hidden_layer(input_features)
+        return self.output_layer(activation)
+
+class Decoder(tf.keras.layers.Layer):
+    def __init__(self, original_dim, code_dim=64):
+        super(Decoder, self).__init__()
+        self.hidden_layer = tf.keras.layers.Dense(units=code_dim, activation=tf.nn.relu)
+        self.output_layer = tf.keras.layers.Dense(units=original_dim, activation=tf.nn.relu)
+
+    def call(self, code):
+        activation = self.hidden_layer(code)
+        return self.output_layer(activation)
+
+class Autoencoder(tf.keras.Model):
+    def __init__(self, code_dim=64, intermediate_dim=128, original_dim=784):
+        super(Autoencoder, self).__init__()
+        self.loss = []
+        self.encoder = Encoder(code_dim=code_dim, intermediate_dim=intermediate_dim)
+        self.decoder = Decoder(intemediate_dim=intermediate_dim, original_dim=original_dim)
+
+    def call(self, features):
+        code = self.encoder(features)
+        reconstructed = self.decoder(code)
+        return reconstructed
