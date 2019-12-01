@@ -3,8 +3,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-__author__ = 'Abien Fred Agarap'
-__version__ = '1.0.0'
+__author__ = "Abien Fred Agarap"
+__version__ = "1.0.0"
 
 import matplotlib.pyplot as plt
 import torch
@@ -22,29 +22,17 @@ class Encoder(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv1_layer_1 = nn.Conv2d(
-                in_channels=1,
-                out_channels=32,
-                kernel_size=3,
-                stride=(1, 1)
-                )
+            in_channels=1, out_channels=32, kernel_size=3, stride=(1, 1)
+        )
         self.conv1_layer_2 = nn.Conv2d(
-                in_channels=32,
-                out_channels=32,
-                kernel_size=3,
-                stride=(1, 1)
-                )
+            in_channels=32, out_channels=32, kernel_size=3, stride=(1, 1)
+        )
         self.conv2_layer_1 = nn.Conv2d(
-                in_channels=32,
-                out_channels=64,
-                kernel_size=3,
-                stride=(1, 1)
-                )
+            in_channels=32, out_channels=64, kernel_size=3, stride=(1, 1)
+        )
         self.conv2_layer_2 = nn.Conv2d(
-                in_channels=64,
-                out_channels=64,
-                kernel_size=3,
-                stride=(1, 1)
-                )
+            in_channels=64, out_channels=64, kernel_size=3, stride=(1, 1)
+        )
 
     def forward(self, features):
         activation = self.conv1_layer_1(features)
@@ -62,29 +50,17 @@ class Decoder(nn.Module):
     def __init__(self):
         super().__init__()
         self.convt1_layer_1 = nn.ConvTranspose2d(
-                in_channels=64,
-                out_channels=64,
-                kernel_size=3,
-                stride=(1, 1)
-                )
+            in_channels=64, out_channels=64, kernel_size=3, stride=(1, 1)
+        )
         self.convt1_layer_2 = nn.ConvTranspose2d(
-                in_channels=64,
-                out_channels=32,
-                kernel_size=3,
-                stride=(1, 1)
-                )
+            in_channels=64, out_channels=32, kernel_size=3, stride=(1, 1)
+        )
         self.convt2_layer_1 = nn.ConvTranspose2d(
-                in_channels=32,
-                out_channels=32,
-                kernel_size=3,
-                stride=(1, 1)
-                )
+            in_channels=32, out_channels=32, kernel_size=3, stride=(1, 1)
+        )
         self.convt2_layer_2 = nn.ConvTranspose2d(
-                in_channels=32,
-                out_channels=1,
-                kernel_size=3,
-                stride=(1, 1)
-                )
+            in_channels=32, out_channels=1, kernel_size=3, stride=(1, 1)
+        )
 
     def forward(self, features):
         activation = self.convt1_layer_1(features)
@@ -113,35 +89,22 @@ class AE(nn.Module):
 transform = torchvision.transforms.Compose([torchvision.transforms.ToTensor()])
 
 train_dataset = torchvision.datasets.MNIST(
-        root='~/torch_datasets',
-        train=True,
-        transform=transform,
-        download=True
-        )
+    root="~/torch_datasets", train=True, transform=transform, download=True
+)
 
 test_dataset = torchvision.datasets.MNIST(
-        root='~/torch_datasets',
-        train=False,
-        transform=transform,
-        download=True
-        )
+    root="~/torch_datasets", train=False, transform=transform, download=True
+)
 
 train_loader = torch.utils.data.DataLoader(
-        train_dataset,
-        batch_size=128,
-        shuffle=True,
-        num_workers=4,
-        pin_memory=True
-        )
+    train_dataset, batch_size=128, shuffle=True, num_workers=4, pin_memory=True
+)
 
 test_loader = torch.utils.data.DataLoader(
-        test_dataset,
-        batch_size=128,
-        shuffle=False,
-        num_workers=4
-        )
+    test_dataset, batch_size=128, shuffle=False, num_workers=4
+)
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = AE().to(device)
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 criterion = nn.MSELoss().to(device)
@@ -162,7 +125,7 @@ for epoch in range(epochs):
         optimizer.step()
         loss += train_loss.item()
     loss = loss / len(train_loader)
-    print('epoch : {}/{}, loss = {:.6f}'.format(epoch + 1, epochs, loss))
+    print("epoch : {}/{}, loss = {:.6f}".format(epoch + 1, epochs, loss))
 
 with torch.no_grad():
     number = 10
