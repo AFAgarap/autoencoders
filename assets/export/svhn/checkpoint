@@ -1,0 +1,2 @@
+model_checkpoint_path: "mini_vgg_ae_svhn"
+all_model_checkpoint_paths: "mini_vgg_ae_svhn"
