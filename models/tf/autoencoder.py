@@ -15,7 +15,7 @@ class Encoder(tf.keras.layers.Layer):
         self.hidden_layer = tf.keras.layers.Dense(
             units=intermediate_dim, activation=tf.nn.relu
         )
-        self.output_layer = tf.keras.layers.Dense(units=code_dim, activation=tf.nn.relu)
+        self.output_layer = tf.keras.layers.Dense(units=code_dim, activation=tf.nn.sigmoid)
 
     def call(self, input_features):
         activation = self.hidden_layer(input_features)
@@ -27,7 +27,7 @@ class Decoder(tf.keras.layers.Layer):
         super(Decoder, self).__init__()
         self.hidden_layer = tf.keras.layers.Dense(units=code_dim, activation=tf.nn.relu)
         self.output_layer = tf.keras.layers.Dense(
-            units=original_dim, activation=tf.nn.relu
+            units=original_dim, activation=tf.nn.sigmoid
         )
 
     def call(self, code):
