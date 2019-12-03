@@ -8,9 +8,9 @@ __author__ = "Abien Fred Agarap"
 import tensorflow as tf
 
 
-class CVAE(tf.keras.Model):
+class CAE(tf.keras.Model):
     def __init__(self, **kwargs):
-        super(CVAE, self).__init__()
+        super(CAE, self).__init__()
         self.encoder = Encoder(
             input_shape=kwargs["input_shape"], latent_dim=kwargs["latent_dim"]
         )
