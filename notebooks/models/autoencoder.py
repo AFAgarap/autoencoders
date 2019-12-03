@@ -41,7 +41,7 @@ class Autoencoder(tf.keras.Model):
         self.loss = []
         self.encoder = Encoder(code_dim=code_dim, intermediate_dim=intermediate_dim)
         self.decoder = Decoder(
-            intermediate_dim=intermediate_dim, original_dim=original_dim
+            code_dim=code_dim, original_dim=original_dim
         )
 
     def call(self, features):
