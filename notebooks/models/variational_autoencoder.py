@@ -20,7 +20,6 @@ class VAE(tf.keras.Model):
             original_dim=kwargs["original_dim"],
         )
 
-    @tf.function
     def call(self, features):
         z_mean, z_log_var, latent_code = self.encoder(features)
         reconstructed = self.decoder(latent_code)
