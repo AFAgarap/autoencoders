@@ -20,7 +20,7 @@ class CAE(tf.keras.Model):
         return reconstructed
 
 
-class Encoder(tf.keras.layers.Layer):
+class Encoder(tf.keras.Model):
     def __init__(self, **kwargs):
         super(Encoder, self).__init__()
         self.input_layer = tf.keras.layers.InputLayer(input_shape=kwargs["input_shape"])
@@ -46,7 +46,7 @@ class Encoder(tf.keras.layers.Layer):
         return code
 
 
-class Decoder(tf.keras.layers.Layer):
+class Decoder(tf.keras.Model):
     def __init__(self, **kwargs):
         super(Decoder, self).__init__()
         self.convt_1_layer_1 = tf.keras.layers.Conv2DTranspose(
