@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
+from tqdm import tqdm
 
 torch.manual_seed(42)
 torch.backends.cudnn.deterministic = True
@@ -75,7 +76,7 @@ criterion = nn.MSELoss()
 
 epochs = 20
 
-for epoch in range(epochs):
+for epoch in tqdm(range(epochs)):
     loss = 0
     for batch_features, _ in train_loader:
         batch_features = batch_features.view(-1, 784).to(device)
