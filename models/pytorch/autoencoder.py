@@ -20,7 +20,7 @@ class Encoder(nn.Module):
         activation = self.encoder_hidden_layer(features)
         activation = torch.relu(activation)
         code = self.encoder_output_layer(activation)
-        code = torch.relu(code)
+        code = torch.sigmoid(code)
         return code
 
 
@@ -34,7 +34,7 @@ class Decoder(nn.Module):
         activation = self.decoder_hidden_layer(features)
         activation = torch.relu(activation)
         activation = self.decoder_output_layer(activation)
-        reconstructed = torch.relu(activation)
+        reconstructed = torch.sigmoid(activation)
         return reconstructed
 
 
