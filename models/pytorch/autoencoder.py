@@ -18,9 +18,9 @@ class Encoder(nn.Module):
 
     def forward(self, features):
         activation = self.encoder_hidden_layer(features)
-        activation = F.relu(activation)
+        activation = torch.relu(activation)
         code = self.encoder_output_layer(activation)
-        code = F.relu(code)
+        code = torch.relu(code)
         return code
 
 
@@ -32,9 +32,9 @@ class Decoder(nn.Module):
 
     def forward(self, features):
         activation = self.decoder_hidden_layer(features)
-        activation = F.relu(activation)
+        activation = torch.relu(activation)
         activation = self.decoder_output_layer(activation)
-        reconstructed = F.relu(activation)
+        reconstructed = torch.relu(activation)
         return reconstructed
 
 
