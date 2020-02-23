@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
+from tqdm import tqdm
 
 torch.manual_seed(42)
 torch.backends.cudnn.deterministic = True
@@ -18,9 +19,9 @@ class Encoder(nn.Module):
 
     def forward(self, features):
         activation = self.encoder_hidden_layer(features)
-        activation = F.relu(activation)
+        activation = torch.relu(activation)
         code = self.encoder_output_layer(activation)
-        code = F.relu(code)
+        code = torch.sigmoid(code)
         return code
 
 
@@ -32,9 +33,9 @@ class Decoder(nn.Module):
 
     def forward(self, features):
         activation = self.decoder_hidden_layer(features)
-        activation = F.relu(activation)
+        activation = torch.relu(activation)
         activation = self.decoder_output_layer(activation)
-        reconstructed = F.relu(activation)
+        reconstructed = torch.sigmoid(activation)
         return reconstructed
 
 
@@ -75,7 +76,7 @@ criterion = nn.MSELoss()
 
 epochs = 20
 
-for epoch in range(epochs):
+for epoch in tqdm(range(epochs)):
     loss = 0
     for batch_features, _ in train_loader:
         batch_features = batch_features.view(-1, 784).to(device)
