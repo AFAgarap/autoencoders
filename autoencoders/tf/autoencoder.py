@@ -51,6 +51,7 @@ class Encoder(tf.keras.Model):
     This architecture is based on Salakhutdinov & Hinton (2007)
     [http://proceedings.mlr.press/v2/salakhutdinov07a.html]
     """
+
     def __init__(self, **kwargs):
         """
         Constructs the encoder model.
