@@ -6,23 +6,30 @@ from __future__ import print_function
 __version__ = "1.0.0"
 __author__ = "Abien Fred Agarap"
 
+from functools import partial
 import tensorflow as tf
 
 
+dense = partial(
+        tf.keras.layers.Dense,
+        activation=tf.nn.relu,
+        kernel_initializer="he_normal"
+        )
+
 class Encoder(tf.keras.layers.Layer):
-    def __init__(self, intermediate_dim=128, code_dim=64):
+    def __init__(self, **kwargs):
         super(Encoder, self).__init__()
-        self.hidden_layer = tf.keras.layers.Dense(
-            units=intermediate_dim, activation=tf.nn.relu
-        )
-        self.output_layer = tf.keras.layers.Dense(
-            units=code_dim, activation=tf.nn.sigmoid
-        )
+        self.encoder_layer_1 = dense(units=500)
+        self.encoder_layer_2 = dense(units=500)
+        self.encoder_layer_3 = dense(units=2000)
+        self.code_layer = tf.keras.layers.Dense(units=kwargs["code_dim"], activation=tf.nn.sigmoid)
 
-    def call(self, input_features):
-        activation = self.hidden_layer(input_features)
-        return self.output_layer(activation)
-
+    def call(self, features):
+        activation = self.encoder_layer_1(features)
+        activation = self.encoder_layer_2(activation)
+        activation = self.encoder_layer_3(activation)
+        code = self.code_layer(activation)
+        return code
 
 class Decoder(tf.keras.layers.Layer):
     def __init__(self, original_dim, code_dim=64):
