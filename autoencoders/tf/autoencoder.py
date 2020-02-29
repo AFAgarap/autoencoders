@@ -32,17 +32,19 @@ class Encoder(tf.keras.layers.Layer):
         return code
 
 class Decoder(tf.keras.layers.Layer):
-    def __init__(self, original_dim, code_dim=64):
+    def __init__(self, **kwargs):
         super(Decoder, self).__init__()
-        self.hidden_layer = tf.keras.layers.Dense(units=code_dim, activation=tf.nn.relu)
-        self.output_layer = tf.keras.layers.Dense(
-            units=original_dim, activation=tf.nn.sigmoid
-        )
+        self.decoder_layer_1 = dense(units=2000)
+        self.decoder_layer_2 = dense(units=500)
+        self.decoder_layer_3 = dense(units=500)
+        self.reconstruction_layer = tf.keras.layers.Dense(units=kwargs["input_shape"], activation=tf.nn.sigmoid)
 
     def call(self, code):
-        activation = self.hidden_layer(code)
-        return self.output_layer(activation)
-
+        activation = self.decoder_layer_1(code)
+        activation = self.decoder_layer_2(activation)
+        activation = self.decoder_layer_3(activation)
+        reconstruction = self.reconstruction_layer(activation)
+        return reconstruction
 
 class Autoencoder(tf.keras.Model):
     def __init__(self, code_dim=64, intermediate_dim=128, original_dim=784):
