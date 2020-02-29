@@ -11,10 +11,9 @@ import tensorflow as tf
 
 
 dense = partial(
-        tf.keras.layers.Dense,
-        activation=tf.nn.relu,
-        kernel_initializer="he_normal"
-        )
+    tf.keras.layers.Dense, activation=tf.nn.relu, kernel_initializer="he_normal"
+)
+
 
 class Encoder(tf.keras.Model):
     def __init__(self, **kwargs):
@@ -22,7 +21,9 @@ class Encoder(tf.keras.Model):
         self.encoder_layer_1 = dense(units=500)
         self.encoder_layer_2 = dense(units=500)
         self.encoder_layer_3 = dense(units=2000)
-        self.code_layer = tf.keras.layers.Dense(units=kwargs["code_dim"], activation=tf.nn.sigmoid)
+        self.code_layer = tf.keras.layers.Dense(
+            units=kwargs["code_dim"], activation=tf.nn.sigmoid
+        )
 
     def call(self, features):
         activation = self.encoder_layer_1(features)
@@ -31,13 +32,16 @@ class Encoder(tf.keras.Model):
         code = self.code_layer(activation)
         return code
 
+
 class Decoder(tf.keras.Model):
     def __init__(self, **kwargs):
         super(Decoder, self).__init__()
         self.decoder_layer_1 = dense(units=2000)
         self.decoder_layer_2 = dense(units=500)
         self.decoder_layer_3 = dense(units=500)
-        self.reconstruction_layer = tf.keras.layers.Dense(units=kwargs["input_shape"], activation=tf.nn.sigmoid)
+        self.reconstruction_layer = tf.keras.layers.Dense(
+            units=kwargs["input_shape"], activation=tf.nn.sigmoid
+        )
 
     def call(self, code):
         activation = self.decoder_layer_1(code)
@@ -45,6 +49,7 @@ class Decoder(tf.keras.Model):
         activation = self.decoder_layer_3(activation)
         reconstruction = self.reconstruction_layer(activation)
         return reconstruction
+
 
 class Autoencoder(tf.keras.Model):
     def __init__(self, **kwargs):
