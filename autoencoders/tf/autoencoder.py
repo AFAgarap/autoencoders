@@ -46,7 +46,22 @@ dense = partial(
 
 
 class Encoder(tf.keras.Model):
+    """
+    The encoder model of a fully connected autoencoder model.
+    This architecture is based on Salakhutdinov & Hinton (2007)
+    [http://proceedings.mlr.press/v2/salakhutdinov07a.html]
+    """
     def __init__(self, **kwargs):
+        """
+        Constructs the encoder model.
+
+        Parameters
+        ----------
+        kwargs
+        code_dim: int
+            The dimensionality of the latent code representation.
+
+        """
         super(Encoder, self).__init__()
         self.encoder_layer_1 = dense(units=500)
         self.encoder_layer_2 = dense(units=500)
@@ -56,6 +71,19 @@ class Encoder(tf.keras.Model):
         )
 
     def call(self, features):
+        """
+        The forward pass for the encoder model.
+
+        Parameters
+        ----------
+        features: array or array-like object
+            The input features to encode.
+
+        Returns
+        -------
+        code: array or array-like object
+            The latent code representation of the features.
+        """
         activation = self.encoder_layer_1(features)
         activation = self.encoder_layer_2(activation)
         activation = self.encoder_layer_3(activation)
