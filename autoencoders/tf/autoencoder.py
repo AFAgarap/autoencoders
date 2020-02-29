@@ -16,7 +16,7 @@ dense = partial(
         kernel_initializer="he_normal"
         )
 
-class Encoder(tf.keras.layers.Layer):
+class Encoder(tf.keras.Model):
     def __init__(self, **kwargs):
         super(Encoder, self).__init__()
         self.encoder_layer_1 = dense(units=500)
@@ -31,7 +31,7 @@ class Encoder(tf.keras.layers.Layer):
         code = self.code_layer(activation)
         return code
 
-class Decoder(tf.keras.layers.Layer):
+class Decoder(tf.keras.Model):
     def __init__(self, **kwargs):
         super(Decoder, self).__init__()
         self.decoder_layer_1 = dense(units=2000)
