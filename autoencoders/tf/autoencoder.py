@@ -47,11 +47,11 @@ class Decoder(tf.keras.layers.Layer):
         return reconstruction
 
 class Autoencoder(tf.keras.Model):
-    def __init__(self, code_dim=64, intermediate_dim=128, original_dim=784):
+    def __init__(self, **kwargs):
         super(Autoencoder, self).__init__()
         self.loss = []
-        self.encoder = Encoder(code_dim=code_dim, intermediate_dim=intermediate_dim)
-        self.decoder = Decoder(code_dim=code_dim, original_dim=original_dim)
+        self.encoder = Encoder(code_dim=kwargs["code_dim"])
+        self.decoder = Decoder(input_shape=kwargs["input_shape"])
 
     def call(self, features):
         code = self.encoder(features)
