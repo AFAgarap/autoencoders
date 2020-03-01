@@ -84,18 +84,18 @@ def train_step(model, optimizer, loss, batch_features):
     return train_loss
 
 
-for epoch in range(epochs):
-    loss = 0
-    for batch_features, _ in train_loader:
-        batch_features = batch_features.view(-1, 784).to(device)
-        optimizer.zero_grad()
-        outputs = model(batch_features)
-        train_loss = criterion(outputs, batch_features)
-        train_loss.backward()
-        optimizer.step()
-        loss += train_loss.item()
-    loss = loss / len(train_loader)
-    print("epoch : {}/{}, loss = {:.6f}".format(epoch + 1, epochs, loss))
+def train(model, optimizer, loss, train_loader, epochs, device):
+    train_loss = []
+    for epoch in range(epochs):
+        epoch_loss = 0
+        for batch_features, _ in train_loader:
+            batch_features = batch_features.view(-1, 784).to(device)
+            step_loss = train_step(model, optimizer, loss, batch_features)
+            epoch_loss += step_loss.item()
+        epoch_loss = epoch_loss / len(train_loader)
+        train_loss.append(epoch_loss)
+        print("epoch : {}/{}, loss = {:.6f}".format(epoch + 1, epochs, epoch_loss))
+
 
 with torch.no_grad():
     number = 10
