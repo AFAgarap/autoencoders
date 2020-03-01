@@ -32,7 +32,7 @@
 import torch
 
 
-class Autoencoder(nn.Module):
+class Autoencoder(torch.nn.Module):
     def __init__(self, **kwargs):
         super().__init__()
         self.encoder_layers = torch.nn.ModuleList([
