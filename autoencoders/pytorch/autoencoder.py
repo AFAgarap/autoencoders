@@ -29,7 +29,6 @@
 # For more information on this, and how to apply and follow the GNU AGPL, see
 # <http://www.gnu.org/licenses/>.
 """PyTorch implementation of a vanilla autoencoder"""
-import matplotlib.pyplot as plt
 import torch
 
 
@@ -95,28 +94,3 @@ def train(model, optimizer, loss, train_loader, epochs, device):
         epoch_loss = epoch_loss / len(train_loader)
         train_loss.append(epoch_loss)
         print("epoch : {}/{}, loss = {:.6f}".format(epoch + 1, epochs, epoch_loss))
-
-
-with torch.no_grad():
-    number = 10
-    plt.figure(figsize=(20, 4))
-    for index in range(number):
-        # display original
-        ax = plt.subplot(2, number, index + 1)
-        plt.imshow(test_dataset.data[index].reshape(28, 28))
-        plt.gray()
-        ax.get_xaxis().set_visible(False)
-        ax.get_yaxis().set_visible(False)
-
-        # display reconstruction
-        ax = plt.subplot(2, number, index + 1 + number)
-        test_data = test_dataset.data[index]
-        test_data = test_data.to(device)
-        test_data = test_data.float()
-        test_data = test_data.view(-1, 784)
-        output = model(test_data)
-        plt.imshow(output.cpu().reshape(28, 28))
-        plt.gray()
-        ax.get_xaxis().set_visible(False)
-        ax.get_yaxis().set_visible(False)
-    plt.show()
