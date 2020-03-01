@@ -69,17 +69,46 @@ class Decoder(nn.Module):
         return reconstructed
 
 
-class AE(nn.Module):
-    def __init__(self):
+class Autoencoder(nn.Module):
+    def __init__(self, **kwargs):
         super().__init__()
-        self.encoder = Encoder()
-        self.decoder = Decoder()
+        self.encoder_layers = torch.nn.ModuleList([
+            torch.nn.Linear(in_features=kwargs["input_shape"], out_features=500),
+            torch.nn.ReLU(),
+            torch.nn.Linear(in_features=500, out_features=500),
+            torch.nn.ReLU(),
+            torch.nn.Linear(in_features=500, out_features=2000),
+            torch.nn.ReLU(),
+            torch.nn.Linear(in_features=2000, out_features=kwargs["code_dim"]),
+            torch.nn.Sigmoid()
+        ])
+        self.decoder_layers = torch.nn.ModuleList([
+            torch.nn.Linear(in_features=kwargs["code_dim"], out_features=2000),
+            torch.nn.ReLU(),
+            torch.nn.Linear(in_features=2000, out_features=500),
+            torch.nn.ReLU(),
+            torch.nn.Linear(in_features=500, out_features=500),
+            torch.nn.ReLU(),
+            torch.nn.Linear(in_features=500, out_features=kwargs["input_shape"]),
+            torch.nn.Sigmoid()
+        ])
 
     def forward(self, features):
-        code = self.encoder(features)
-        reconstructed = self.decoder(code)
-        return reconstructed
-
+        activations = {}
+        for index, encoder_layer in enumerate(self.encoder_layers):
+            if index == 0:
+                activations[index] = encoder_layer(features)
+            else:
+                activations[index] = encoder_layer(activations[index - 1])
+        code = activations[len(activations) - 1]
+        activations = {}
+        for index, decoder_layer in enumerate(self.decoder_layers):
+            if index == 0:
+                activations[index] = decoder_layer(code)
+            else:
+                activations[index] = decoder_layer(activations[index - 1])
+        reconstruction = activations[len(activations) - 1]
+        return reconstruction
 
 transform = torchvision.transforms.Compose([torchvision.transforms.ToTensor()])
 
