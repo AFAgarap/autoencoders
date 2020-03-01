@@ -82,10 +82,6 @@ class Autoencoder(nn.Module):
         reconstruction = activations[len(activations) - 1]
         return reconstruction
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = AE().to(device)
-optimizer = optim.Adam(model.parameters(), lr=1e-3)
-criterion = nn.MSELoss()
 
 epochs = 20
 
