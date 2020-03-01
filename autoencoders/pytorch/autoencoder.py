@@ -75,7 +75,14 @@ class Autoencoder(nn.Module):
         return reconstruction
 
 
-epochs = 20
+def train_step(model, optimizer, loss, batch_features):
+    optimizer.zero_grad()
+    outputs = model(batch_features)
+    train_loss = loss(outputs, batch_features)
+    train_loss.backward()
+    optimizer.step()
+    return train_loss
+
 
 for epoch in range(epochs):
     loss = 0
