@@ -8,13 +8,6 @@ def load_tfds(name: str = "mnist") -> Tuple[np.ndarray, np.ndarray, np.ndarray, 
     """
     Returns a data set from `tfds`.
 
-    For this experiment, the options are:
-        1. mnist
-        2. fashion_mnist
-        3. emnist/letters
-        4. cifar10
-        5. svhn_cropped
-
     Parameters
     ----------
     name : str
