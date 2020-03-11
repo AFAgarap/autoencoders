@@ -5,10 +5,11 @@ class NeuralNet(tf.keras.Model):
     def __init__(self, **kwargs):
         super().__init__()
         self.hidden_layers = [
-                tf.keras.layers.Dense(units=unit, activation=tf.nn.relu,
-                    kernel_initializer="he_normal")
-                for unit in kwargs["units"]
-                ]
+            tf.keras.layers.Dense(
+                units=unit, activation=tf.nn.relu, kernel_initializer="he_normal"
+            )
+            for unit in kwargs["units"]
+        ]
         self.output_layer = tf.keras.layers.Dense(units=kwargs["num_classes"])
 
     def call(self, features):
