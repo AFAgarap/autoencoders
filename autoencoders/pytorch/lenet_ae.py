@@ -76,59 +76,6 @@ class LeNetAE(torch.nn.Module):
         reconstruction = decoder_activations[len(decoder_activations) - 1]
         return reconstruction
 
-class Encoder(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.conv_layer_1 = nn.Conv2d(
-            in_channels=1, out_channels=6, kernel_size=5, stride=(2, 2)
-        )
-        self.conv_layer_2 = nn.Conv2d(
-            in_channels=6, out_channels=16, kernel_size=5, stride=(2, 2)
-        )
-
-    def forward(self, features):
-        activation = self.conv_layer_1(features)
-        activation = F.relu(activation)
-        activation = self.conv_layer_2(activation)
-        code = F.relu(activation)
-        return code
-
-
-class Decoder(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.convt_layer_1 = nn.ConvTranspose2d(
-            in_channels=16, out_channels=6, kernel_size=5, stride=(2, 2)
-        )
-        self.convt_layer_2 = nn.ConvTranspose2d(
-            in_channels=6, out_channels=16, kernel_size=5, stride=(2, 2)
-        )
-        self.convt_layer_3 = nn.ConvTranspose2d(
-            in_channels=16, out_channels=1, kernel_size=4, stride=(1, 1)
-        )
-
-    def forward(self, features):
-        activation = self.convt_layer_1(features)
-        activation = F.relu(activation)
-        activation = self.convt_layer_2(activation)
-        activation = F.relu(activation)
-        activation = self.convt_layer_3(activation)
-        reconstructed = F.relu(activation)
-        return reconstructed
-
-
-class AE(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.encoder = Encoder()
-        self.decoder = Decoder()
-
-    def forward(self, features):
-        code = self.encoder(features)
-        reconstructed = self.decoder(code)
-        return reconstructed
-
-
 transform = torchvision.transforms.Compose([torchvision.transforms.ToTensor()])
 
 train_dataset = torchvision.datasets.MNIST(
