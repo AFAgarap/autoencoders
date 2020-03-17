@@ -58,8 +58,21 @@ class LeNetAE(torch.nn.Module):
         ])
 
     def forward(self, features):
-        pass
-
+        encoder_activations = {}
+        for index, encoder_layer in enumerate(self.encoder_layers):
+            if index == 0:
+                encoder_activations[index] = encoder_layer(features)
+            else:
+                encoder_activations[index] = encoder_layer(encoder_activations[index - 1])
+        code = encoder_activations[len(encoder_activations) - 1]
+        decoder_activations = {}
+        for index, decoder_layer in enumerate(self.decoder_layers):
+            if index == 0:
+                decoder_activations[index] = decoder_layer(code)
+            else:
+                decoder_activations[index] = decoder_layer(decoder_activations[index - 1])
+        reconstruction = decoder_activations[len(decoder_activations) - 1]
+        return reconstruction
 
 class Encoder(nn.Module):
     def __init__(self):
