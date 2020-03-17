@@ -49,7 +49,7 @@ def load_dataset() -> Tuple[object, object]:
     test_dataset = torchvision.datasets.MNIST(
             root="~/torch_datasets", train=False, download=True
             )
-    return (train_dataset, test_dataset)
+    return train_dataset, test_dataset
 
 
 def create_dataloader(
