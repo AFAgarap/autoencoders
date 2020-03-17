@@ -61,16 +61,18 @@ class LeNetAE(torch.nn.Module):
         encoder_activations = {}
         for index, encoder_layer in enumerate(self.encoder_layers):
             if index == 0:
-                encoder_activations[index] = encoder_layer(features)
+                encoder_activations[index] = torch.relu(encoder_layer(features))
             else:
                 encoder_activations[index] = encoder_layer(encoder_activations[index - 1])
-        code = encoder_activations[len(encoder_activations) - 1]
+        code = torch.sigmoid(encoder_activations[len(encoder_activations) - 1])
         decoder_activations = {}
         for index, decoder_layer in enumerate(self.decoder_layers):
             if index == 0:
-                decoder_activations[index] = decoder_layer(code)
+                decoder_activations[index] = torch.relu(decoder_layer(code))
+            elif index == len(self.decoder_layers) - 1:
+                decoder_activations[index] = torch.sigmoid(decoder_layer(decoder_activations[index - 1]))
             else:
-                decoder_activations[index] = decoder_layer(decoder_activations[index - 1])
+                decoder_activations[index] = torch.relu(decoder_layer(decoder_activations[index - 1]))
         reconstruction = decoder_activations[len(decoder_activations) - 1]
         return reconstruction
 
