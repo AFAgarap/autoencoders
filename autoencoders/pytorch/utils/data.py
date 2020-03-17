@@ -42,7 +42,7 @@ def load_dataset(name: str = "mnist") -> Tuple[object, object]:
         test_dataset = torchvision.datasets.EMNIST(
             root="~/torch_datasets", train=False, split="balanced", download=True
         )
-    return (train_dataset, test_dataset)
+    return train_dataset, test_dataset
 
 
 def create_dataloader(
