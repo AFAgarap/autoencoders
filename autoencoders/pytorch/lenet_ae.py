@@ -54,7 +54,7 @@ class LeNetAE(torch.nn.Module):
         self.decoder_layers = torch.nn.ModuleList([
             torch.nn.Conv2d(in_channels=16, out_channels=6, kernel_size=5, stride=(2, 2)),
             torch.nn.Conv2d(in_channels=6, out_channels=16, kernel_size=5, stride=(2, 2)),
-            torch.nn.Conv2d(in_channels=16, out_channels=kwargs["input_dim"], kernel_size=5, stride=(2, 2))
+            torch.nn.Conv2d(in_channels=16, out_channels=kwargs["input_dim"], kernel_size=4, stride=(2, 2))
         ])
 
     def forward(self, features):
