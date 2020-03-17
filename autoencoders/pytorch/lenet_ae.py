@@ -44,6 +44,23 @@ import torch.optim as optim
 import torchvision
 
 
+class LeNetAE(torch.nn.Module):
+    def __init__(self, **kwargs):
+        super(LeNetAE, self).__init__()
+        self.encoder_layers = torch.nn.ModuleList([
+            torch.nn.Conv2d(in_channels=kwargs["input_dim"], out_channels=6, kernel_size=5, stride=(2, 2)),
+            torch.nn.Conv2d(in_channels=6, out_channels=16, kernel_size=5, stride=(2, 2))
+        ])
+        self.decoder_layers = torch.nn.ModuleList([
+            torch.nn.Conv2d(in_channels=16, out_channels=6, kernel_size=5, stride=(2, 2)),
+            torch.nn.Conv2d(in_channels=6, out_channels=16, kernel_size=5, stride=(2, 2)),
+            torch.nn.Conv2d(in_channels=16, out_channels=1, kernel_size=5, stride=(2, 2))
+        ])
+
+    def forward(self, features):
+        pass
+
+
 class Encoder(nn.Module):
     def __init__(self):
         super().__init__()
