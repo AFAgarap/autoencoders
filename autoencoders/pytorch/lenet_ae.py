@@ -43,10 +43,6 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
 
-torch.manual_seed(42)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
-
 
 class Encoder(nn.Module):
     def __init__(self):
