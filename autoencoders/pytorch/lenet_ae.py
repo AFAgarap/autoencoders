@@ -40,17 +40,31 @@ __version__ = "1.0.0"
 
 
 class LeNetAE(torch.nn.Module):
-    def __init__(self, **kwargs):
+    def __init__(self, input_dim: int):
         super(LeNetAE, self).__init__()
-        self.encoder_layers = torch.nn.ModuleList([
-            torch.nn.Conv2d(in_channels=kwargs["input_dim"], out_channels=6, kernel_size=5, stride=(2, 2)),
-            torch.nn.Conv2d(in_channels=6, out_channels=16, kernel_size=5, stride=(2, 2))
-        ])
-        self.decoder_layers = torch.nn.ModuleList([
-            torch.nn.Conv2d(in_channels=16, out_channels=6, kernel_size=5, stride=(2, 2)),
-            torch.nn.Conv2d(in_channels=6, out_channels=16, kernel_size=5, stride=(2, 2)),
-            torch.nn.Conv2d(in_channels=16, out_channels=kwargs["input_dim"], kernel_size=4, stride=(2, 2))
-        ])
+        self.encoder_layers = torch.nn.ModuleList(
+            [
+                torch.nn.Conv2d(
+                    in_channels=input_dim, out_channels=6, kernel_size=5, stride=(2, 2)
+                ),
+                torch.nn.Conv2d(
+                    in_channels=6, out_channels=16, kernel_size=5, stride=(2, 2)
+                ),
+            ]
+        )
+        self.decoder_layers = torch.nn.ModuleList(
+            [
+                torch.nn.Conv2d(
+                    in_channels=16, out_channels=6, kernel_size=5, stride=(2, 2)
+                ),
+                torch.nn.Conv2d(
+                    in_channels=6, out_channels=16, kernel_size=5, stride=(2, 2)
+                ),
+                torch.nn.Conv2d(
+                    in_channels=16, out_channels=input_dim, kernel_size=4, stride=(2, 2)
+                ),
+            ]
+        )
 
     def forward(self, features):
         encoder_activations = {}
@@ -58,15 +72,21 @@ class LeNetAE(torch.nn.Module):
             if index == 0:
                 encoder_activations[index] = torch.relu(encoder_layer(features))
             else:
-                encoder_activations[index] = encoder_layer(encoder_activations[index - 1])
+                encoder_activations[index] = encoder_layer(
+                    encoder_activations[index - 1]
+                )
         code = torch.sigmoid(encoder_activations[len(encoder_activations) - 1])
         decoder_activations = {}
         for index, decoder_layer in enumerate(self.decoder_layers):
             if index == 0:
                 decoder_activations[index] = torch.relu(decoder_layer(code))
             elif index == len(self.decoder_layers) - 1:
-                decoder_activations[index] = torch.sigmoid(decoder_layer(decoder_activations[index - 1]))
+                decoder_activations[index] = torch.sigmoid(
+                    decoder_layer(decoder_activations[index - 1])
+                )
             else:
-                decoder_activations[index] = torch.relu(decoder_layer(decoder_activations[index - 1]))
+                decoder_activations[index] = torch.relu(
+                    decoder_layer(decoder_activations[index - 1])
+                )
         reconstruction = decoder_activations[len(decoder_activations) - 1]
         return reconstruction
