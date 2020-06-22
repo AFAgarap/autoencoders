@@ -39,6 +39,17 @@ class Autoencoder(torch.nn.Module):
     """
 
     def __init__(self, input_shape: int, code_dim: int):
+        """
+        Constructs the autoencoder model with the following units,
+        <input_shape>-500-500-2000-<code_dim>-2000-500-500-<input_shape>
+
+        Parameters
+        ----------
+        input_shape: int
+            The dimensionality of the input features.
+        code_dim: int
+            The dimensionality of the latent code.
+        """
         super().__init__()
         self.encoder_layers = torch.nn.ModuleList(
             [
