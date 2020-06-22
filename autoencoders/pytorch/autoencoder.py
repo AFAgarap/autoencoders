@@ -33,28 +33,32 @@ import torch
 
 
 class Autoencoder(torch.nn.Module):
-    def __init__(self, **kwargs):
+    def __init__(self, input_shape: int, code_dim: int):
         super().__init__()
-        self.encoder_layers = torch.nn.ModuleList([
-            torch.nn.Linear(in_features=kwargs["input_shape"], out_features=500),
-            torch.nn.ReLU(),
-            torch.nn.Linear(in_features=500, out_features=500),
-            torch.nn.ReLU(),
-            torch.nn.Linear(in_features=500, out_features=2000),
-            torch.nn.ReLU(),
-            torch.nn.Linear(in_features=2000, out_features=kwargs["code_dim"]),
-            torch.nn.Sigmoid()
-        ])
-        self.decoder_layers = torch.nn.ModuleList([
-            torch.nn.Linear(in_features=kwargs["code_dim"], out_features=2000),
-            torch.nn.ReLU(),
-            torch.nn.Linear(in_features=2000, out_features=500),
-            torch.nn.ReLU(),
-            torch.nn.Linear(in_features=500, out_features=500),
-            torch.nn.ReLU(),
-            torch.nn.Linear(in_features=500, out_features=kwargs["input_shape"]),
-            torch.nn.Sigmoid()
-        ])
+        self.encoder_layers = torch.nn.ModuleList(
+            [
+                torch.nn.Linear(in_features=input_shape, out_features=500),
+                torch.nn.ReLU(),
+                torch.nn.Linear(in_features=500, out_features=500),
+                torch.nn.ReLU(),
+                torch.nn.Linear(in_features=500, out_features=2000),
+                torch.nn.ReLU(),
+                torch.nn.Linear(in_features=2000, out_features=code_dim),
+                torch.nn.Sigmoid(),
+            ]
+        )
+        self.decoder_layers = torch.nn.ModuleList(
+            [
+                torch.nn.Linear(in_features=code_dim, out_features=2000),
+                torch.nn.ReLU(),
+                torch.nn.Linear(in_features=2000, out_features=500),
+                torch.nn.ReLU(),
+                torch.nn.Linear(in_features=500, out_features=500),
+                torch.nn.ReLU(),
+                torch.nn.Linear(in_features=500, out_features=input_shape),
+                torch.nn.Sigmoid(),
+            ]
+        )
 
     def forward(self, features):
         activations = {}
