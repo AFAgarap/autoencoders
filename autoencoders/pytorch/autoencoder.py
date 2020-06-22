@@ -33,6 +33,11 @@ import torch
 
 
 class Autoencoder(torch.nn.Module):
+    """
+    A feed-forward autoencoder neural network that optimizes
+    binary cross entropy using Adam optimizer.
+    """
+
     def __init__(self, input_shape: int, code_dim: int):
         super().__init__()
         self.encoder_layers = torch.nn.ModuleList(
