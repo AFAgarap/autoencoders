@@ -38,17 +38,27 @@ class Autoencoder(torch.nn.Module):
     binary cross entropy using Adam optimizer.
     """
 
-    def __init__(self, input_shape: int, code_dim: int):
+    def __init__(
+        self,
+        input_shape: int,
+        code_dim: int,
+        device: torch.device = torch.device("cpu"),
+        learning_rate: float = 1e-3,
+    ):
         """
         Constructs the autoencoder model with the following units,
         <input_shape>-500-500-2000-<code_dim>-2000-500-500-<input_shape>
 
         Parameters
         ----------
+        device: torch.device
+            The device to use for the model computations.
         input_shape: int
             The dimensionality of the input features.
         code_dim: int
             The dimensionality of the latent code.
+        learning_rate: float
+            The learning rate to use for optimization.
         """
         super().__init__()
         self.encoder_layers = torch.nn.ModuleList(
