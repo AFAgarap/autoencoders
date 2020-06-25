@@ -93,6 +93,8 @@ class Autoencoder(torch.nn.Module):
                 torch.nn.init.kaiming_normal_(layer.weight, nonlinearity="relu")
             else:
                 pass
+        self.device = device
+        self.to(self.device)
 
     def forward(self, features):
         """
