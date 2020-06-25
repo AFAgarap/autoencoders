@@ -94,6 +94,7 @@ class Autoencoder(torch.nn.Module):
             else:
                 pass
         self.device = device
+        self.criterion = torch.nn.BCELoss().to(self.device)
         self.to(self.device)
 
     def forward(self, features):
